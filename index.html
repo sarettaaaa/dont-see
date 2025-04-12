@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>for aiko w/ luv</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://www.transparenttextures.com/patterns/gravel.png');
+      background-color: #330606;
+      color: #eee;
+      font-family: 'UnifrakturCook', cursive;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .question {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border: 1px solid #969494;
+      border-radius: 10px;
+    }
+
+    .question h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      font-family: inherit;
+      transition: background-color 0.3s;
+    }
+
+    .yes {
+      background-color: #222;
+      color: #fff;
+    }
+
+    .yes:hover {
+      background-color: #444;
+    }
+
+    .no {
+      background-color: #700;
+      color: #fff;
+    }
+
+    .no:hover {
+      background-color: #900;
+    }
+
+    .video-container, .ouch-container {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    .ouch-container {
+      color: #ff4444;
+    }
+
+    video {
+      max-width: 90vw;
+      max-height: 60vh;
+    }
+
+    .teardrop {
+      position: absolute;
+      width: 6px;
+      height: 10px;
+      background: #00f2ff;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: fallDrop 2s infinite;
+    }
+
+    @keyframes fallDrop {
+      0% { top: 0; opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+
+    .star {
+      position: fixed;
+      top: -20px;
+      font-size: 20px;
+      color: white;
+      animation: fall 5s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-family: arial;
+    }
+  </style>
+</head>
+<body>
+  <div class="question" id="question">
+    <h1>You sure you love me?</h1>
+    <button class="btn yes" onclick="showVideo()">duh!</button>
+    <button class="btn no" onclick="ouchMode()">mmh..</button>
+  </div>
+
+  <div class="video-container" id="videoContainer">
+    <video controls>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="ouch-container" id="ouchContainer">
+    <h1>that hurted &lt;/3</h1>
+    <button class="back-btn" onclick="goBack()">Retry!</button>
+  </div>
+
+  <script>
+    // Stelline che cadono
+    let starInterval;
+
+    function createStar() {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.innerText = "★";
+      star.style.left = Math.random() * 100 + "vw";
+      star.style.animationDuration = 2 + Math.random() * 3 + "s";
+      document.body.appendChild(star);
+      setTimeout(() => {
+        star.remove();
+      }, 5000);
+    }
+
+    // Avvio iniziale stelline
+    starInterval = setInterval(createStar, 300);
+
+    function showVideo() {
+      document.getElementById('question').style.display = 'none';
+      document.getElementById('videoContainer').style.display = 'block';
+    }
+
+    function ouchMode() {
+      document.body.style.background = '#440000';
+      document.getElementById('question').style.display = 'none';
+      document.getElementById('ouchContainer').style.display = 'block';
+
+      // Rimuovi stelline
+      clearInterval(starInterval);
+      document.querySelectorAll('.star').forEach(star => star.remove());
+
+      // Lacrimucce
+      for (let i = 0; i < 20; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'teardrop';
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        document.body.appendChild(drop);
+      }
+    }
+
+    function goBack() {
+      document.getElementById('ouchContainer').style.display = 'none';
+      document.getElementById('question').style.display = 'block';
+
+      // Ripristina background iniziale
+      document.body.style.background = "url('https://www.transparenttextures.com/patterns/gravel.png')";
+      document.body.style.backgroundColor = "#330606";
+
+      // Rimuovi lacrimucce
+      document.querySelectorAll('.teardrop').forEach(drop => drop.remove());
+
+      // Riavvia le stelline
+      starInterval = setInterval(createStar, 300);
+    }
+  </script>
+</body>
+</html>
+
